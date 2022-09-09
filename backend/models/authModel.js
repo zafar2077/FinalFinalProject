@@ -17,12 +17,30 @@ const authSchema = new mongoose.Schema({
     required: true,
   },
 
-  Cart: {
-    type: Array,
-  },
-  favorites: {
-    type: Array,
-  },
+  Cart: [
+    {
+      id: {
+        type: String,
+      },
+      name: {
+        type: String,
+      },
+      quantity: {
+        type: Number,
+        default: 0,
+      },
+    },
+  ],
+  favorites: [
+    {
+      favoritesId: {
+        type: String,
+      },
+      favoritesName: {
+        type: String,
+      },
+    },
+  ],
   userImage: {
     type: String,
     required: true,

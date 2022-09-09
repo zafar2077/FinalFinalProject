@@ -11,12 +11,16 @@ const getAllProducts = async (req, res) => {
 
 const addProduct = async (req, res) => {
   const newProduct = new productModel({
+    id: req.body.id,
     name: req.body.name,
     stock: req.body.stock,
     price: req.body.price,
     productImage: req.file.path,
   });
-
+  if (!req.body.id) {
+    res.status(402).json({ message: "Id is missing" });
+    return;
+  }
   if (!req.body.name) {
     res.status(402).json({ message: "Full Name is missing" });
     return;
@@ -48,8 +52,12 @@ const addProduct = async (req, res) => {
 };
 
 const deleteProduct = async (req, res) => {
+  if (!req.body.id) {
+    res.status(402).json({ message: "id is missing" });
+    return;
+  }
   try {
-    const response = await productModel.deleteOne({ name: req.body.name });
+    const response = await productModel.deleteOne({ id: req.body.id });
   } catch (error) {
     res.status(401).json({ message: "error" });
     return;
@@ -58,6 +66,10 @@ const deleteProduct = async (req, res) => {
 };
 
 const updateProduct = async (req, res) => {
+  if (!req.body.id) {
+    res.status(402).json({ message: "id is missing" });
+    return;
+  }
   if (!req.body.name) {
     res.status(402).json({ message: "Full Name is missing" });
     return;
@@ -75,7 +87,7 @@ const updateProduct = async (req, res) => {
 
   try {
     productModel.updateOne(
-      { name: req.body.name },
+      { id: req.body.id },
       {
         $set: {
           name: req.body.name,

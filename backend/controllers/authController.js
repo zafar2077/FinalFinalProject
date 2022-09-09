@@ -56,20 +56,50 @@ const addtoCart = async (req, res) => {
     return;
   }
 
-  if (!req.body.productName) {
+  if (!req.body.name) {
     res.status(402).json({ message: "product name is missing" });
     return;
   }
 
-  try {
-    await authModel.updateOne(
-      { email: req.body.email },
-      { $push: { Cart: req.body.productName } }
-    );
-  } catch (error) {
-    res.status(401).json({ message: "error! could not update cart" });
+  if (!req.body.id) {
+    res.status(402).json({ message: "product id is missing" });
     return;
   }
+  const check = authModel.findOne(
+    { email: req.body.email, "Cart.id": req.body.id },
+    async (err, result) => {
+      if (err) {
+        res.status(401).json({ message: "error! could not update cart" });
+        return;
+      }
+      if (!result) {
+        try {
+          await authModel.updateOne(
+            { email: req.body.email },
+            {
+              $push: {
+                Cart: { name: req.body.name, id: req.body.id, quantity: 1 },
+              },
+            }
+          );
+        } catch (error) {
+          res.status(401).json({ message: "error! could not update cart" });
+          return;
+        }
+      } else {
+        try {
+          await authModel.updateOne(
+            { email: req.body.email, "Cart.id": req.body.id },
+            {
+              $inc: { "Cart.$.quantity": 1 },
+            }
+          );
+        } catch (error) {
+          return;
+        }
+      }
+    }
+  );
 
   res.status(202).json({ message: "updated successfully" });
 };
@@ -80,22 +110,39 @@ const removeFromCart = async (req, res) => {
     return;
   }
 
-  if (!req.body.productName) {
-    res.status(402).json({ message: "product name is missing" });
+  if (!req.body.id) {
+    res.status(402).json({ message: "product id is missing" });
     return;
   }
 
-  try {
-    await authModel.updateOne(
-      { email: req.body.email },
-      { $pull: { Cart: req.body.productName } }
-    );
-  } catch (error) {
-    res.status(401).json({ message: "error! could not update cart" });
-    return;
-  }
-
-  res.status(202).json({ message: "updated successfully" });
+  const check = authModel.findOne(
+    {
+      email: req.body.email,
+      "Cart.id": req.body.id,
+    },
+    async (err, result) => {
+      if (err) {
+        return;
+      }
+      if (!result) {
+        res.status(404).json({ message: "no such product in cart" });
+        return;
+      } else {
+        try {
+          await authModel.updateOne(
+            { email: req.body.email, "Cart.id": req.body.id },
+            {
+              $inc: { "Cart.$.quantity": -1 },
+            }
+          );
+          res.status(202).json({ message: "updated successfully" });
+        } catch (error) {
+          res.status(401).json({ message: "error! could not update cart" });
+          return;
+        }
+      }
+    }
+  );
 };
 
 const addtoFavorites = async (req, res) => {
@@ -104,22 +151,45 @@ const addtoFavorites = async (req, res) => {
     return;
   }
 
-  if (!req.body.productName) {
+  if (!req.body.name) {
     res.status(402).json({ message: "product name is missing" });
     return;
   }
 
-  try {
-    await authModel.updateOne(
-      { email: req.body.email },
-      { $push: { favorites: req.body.productName } }
-    );
-  } catch (error) {
-    res.status(401).json({ message: "error! could not update favorites" });
-    return;
-  }
-
-  res.status(202).json({ message: "updated successfully" });
+  const check = authModel.findOne(
+    {
+      email: req.body.email,
+      "favorites.favoritesId": req.body.id,
+    },
+    async (err, result) => {
+      if (err) {
+        res.status(401).json({ message: "error! could not update cart" });
+        return;
+      }
+      if (!result) {
+        try {
+          await authModel.updateOne(
+            { email: req.body.email },
+            {
+              $push: {
+                favorites: {
+                  favoritesName: req.body.name,
+                  favoritesId: req.body.id,
+                },
+              },
+            }
+          );
+          res.status(201).json({ message: "added to favorites successfully" });
+        } catch (error) {
+          res.status(401).json({ message: "could not update favorites" });
+          return;
+        }
+      } else {
+        res.status(401).json({ message: "already exists" });
+        return;
+      }
+    }
+  );
 };
 
 const removeFromFavorites = async (req, res) => {
@@ -128,21 +198,36 @@ const removeFromFavorites = async (req, res) => {
     return;
   }
 
-  if (!req.body.productName) {
-    res.status(402).json({ message: "product name is missing" });
+  if (!req.body.id) {
+    res.status(402).json({ message: "product id is missing" });
     return;
   }
-
-  try {
-    await authModel.updateOne(
-      { email: req.body.email },
-      { $pull: { favorites: req.body.productName } },
-      { multi: false }
-    );
-  } catch (error) {
-    res.status(401).json({ message: "error! could not update cart" });
-    return;
-  }
+  const check = authModel.findOne(
+    {
+      email: req.body.email,
+      "favorites.favoritesId": req.body.id,
+    },
+    async (err, result) => {
+      if (err) {
+        res.status(401).json({ message: "error! could not update cart" });
+        return;
+      }
+      if (!result) {
+        res.status(404).json({ message: "item not found" });
+        return;
+      } else {
+        try {
+          await authModel.updateOne(
+            { email: req.body.email },
+            { $pull: { favorites: { favoritesId: req.body.id } } }
+          );
+        } catch (error) {
+          res.status(401).json({ message: "error! could not update cart" });
+          return;
+        }
+      }
+    }
+  );
 
   res.status(202).json({ message: "updated successfully" });
 };
