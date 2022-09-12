@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+//This contains eveything regarding the user. email,password Cart and favourite etc
 const authSchema = new mongoose.Schema({
   fullName: {
     type: String,

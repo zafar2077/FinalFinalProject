@@ -34,4 +34,6 @@ router.post(
   productController.addProduct
 );
 
+router.post("/addField", productController.addField);
+
 module.exports = router;

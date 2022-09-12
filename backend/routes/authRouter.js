@@ -38,4 +38,6 @@ router.post("/addToFavorites", authController.addtoFavorites);
 
 router.post("/removeFromFavorites", authController.removeFromFavorites);
 
+router.post("/getUser", authController.getUser);
+
 module.exports = router;

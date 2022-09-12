@@ -12,13 +12,13 @@ const dbConnection = require("./database/auth");
 const authRouter = require("./routes/authRouter");
 const productRouter = require("./routes/productRouter");
 const app = express();
+app.use(cors());
 app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
     extended: false,
   })
 );
-app.use(cors());
 dbConnection();
 app.use("/uploads", express.static("uploads"));
 app.use("/auth", authRouter);

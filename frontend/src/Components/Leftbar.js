@@ -6,13 +6,14 @@ import {
   FaRegArrowAltCircleRight,
   FaHeadphones,
   FaRegArrowAltCircleDown,
+  FaShoppingCart,
 } from "react-icons/fa";
 
 import { GiPc, GiVrHeadset, GiKeyboard, GiMouse } from "react-icons/gi";
 import { Link } from "react-router-dom";
 
 import "./leftbar.css";
-export default function Leftbar() {
+export default function Leftbar(props) {
   const [sidebarTrigger, setSidebarStrigger] = React.useState(true);
 
   const toggle = () => {
@@ -45,13 +46,13 @@ export default function Leftbar() {
       </div>
 
       <div className="optionContainer">
-        <FaWallet className="icon" />
-        <Link to="/balance" className="links">
-          <p className="leftBarText">Balance</p>
+        <FaShoppingCart className="icon" />
+        <Link to="/cart" className="links">
+          <p className="leftBarText">Cart</p>
         </Link>
       </div>
       {sidebarTrigger ? (
-        <div className="LowerOptionContainer" style={{ marginTop: "100px" }}>
+        <div className="LowerOptionContainer" style={{ marginTop: "12%" }}>
           <p className="LowerLeftBarText" style={{ marginLeft: "0px" }}>
             Category
           </p>
@@ -63,7 +64,7 @@ export default function Leftbar() {
         </div>
       ) : (
         <>
-          <div className="LowerOptionContainer" style={{ marginTop: "100px" }}>
+          <div className="LowerOptionContainer" style={{ marginTop: "12%" }}>
             <p className="LowerLeftBarText" style={{ marginLeft: "0px" }}>
               Category
             </p>
@@ -74,29 +75,124 @@ export default function Leftbar() {
             />
           </div>
 
-          <div className="LowerOptionContainer">
+          <div
+            className={"LowerOptionContainer"}
+            onClick={() => {
+              props.setCategory("All Products");
+            }}
+            style={{
+              backgroundColor:
+                props.category === "All Products" ? "Purple" : "",
+            }}
+          >
+            <p
+              className="LowerLeftBarText"
+              style={{
+                color: props.category === "All Products" ? "White" : "",
+              }}
+            >
+              All Products
+            </p>
+          </div>
+
+          <div
+            className="LowerOptionContainer"
+            onClick={() => {
+              props.setCategory("Computer");
+            }}
+            style={{
+              backgroundColor: props.category === "Computer" ? "Purple" : "",
+            }}
+          >
             <GiPc className="icon" />
-            <p className="LowerLeftBarText">Computer</p>
+            <p
+              className="LowerLeftBarText"
+              style={{
+                color: props.category === "Computer" ? "White" : "",
+              }}
+            >
+              Computer
+            </p>
           </div>
 
-          <div className="LowerOptionContainer">
+          <div
+            className="LowerOptionContainer"
+            onClick={() => {
+              props.setCategory("Headphones");
+            }}
+            style={{
+              backgroundColor: props.category === "Headphones" ? "Purple" : "",
+            }}
+          >
             <FaHeadphones className="icon" />
-            <p className="LowerLeftBarText">Gaming Headphones</p>
+            <p
+              className="LowerLeftBarText"
+              style={{
+                color: props.category === "Headphones" ? "White" : "",
+              }}
+            >
+              Gaming Headphones
+            </p>
           </div>
 
-          <div className="LowerOptionContainer">
+          <div
+            className="LowerOptionContainer"
+            onClick={() => {
+              props.setCategory("VR");
+            }}
+            style={{
+              backgroundColor: props.category === "VR" ? "Purple" : "",
+            }}
+          >
             <GiVrHeadset className="icon" />
-            <p className="LowerLeftBarText">VR Glasses</p>
+            <p
+              className="LowerLeftBarText"
+              style={{
+                color: props.category === "VR" ? "White" : "",
+              }}
+            >
+              VR Glasses
+            </p>
           </div>
 
-          <div className="LowerOptionContainer">
+          <div
+            className="LowerOptionContainer"
+            onClick={() => {
+              props.setCategory("Keyboard");
+            }}
+            style={{
+              backgroundColor: props.category === "Keyboard" ? "Purple" : "",
+            }}
+          >
             <GiKeyboard className="icon" />
-            <p className="LowerLeftBarText">Keyboard</p>
+            <p
+              className="LowerLeftBarText"
+              style={{
+                color: props.category === "Keyboard" ? "White" : "",
+              }}
+            >
+              Keyboard
+            </p>
           </div>
 
-          <div className="LowerOptionContainer">
+          <div
+            className="LowerOptionContainer"
+            onClick={() => {
+              props.setCategory("Mouse");
+            }}
+            style={{
+              backgroundColor: props.category === "Mouse" ? "Purple" : "",
+            }}
+          >
             <GiMouse className="icon" />
-            <p className="LowerLeftBarText">Mouse</p>
+            <p
+              className="LowerLeftBarText"
+              style={{
+                color: props.category === "Mouse" ? "White" : "",
+              }}
+            >
+              Mouse
+            </p>
           </div>
         </>
       )}

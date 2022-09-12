@@ -26,12 +26,12 @@ const signUp = async (req, res) => {
 
   try {
     const userCreated = await newUser.save();
+    res.status(200).json({ message: "signed up successfully" });
+    return;
   } catch (error) {
     res.status(401).json({ error });
     return;
   }
-
-  res.status(201).json({ message: "signed up successfully" });
 };
 
 const signIn = async (req, res) => {
@@ -213,7 +213,6 @@ const removeFromFavorites = async (req, res) => {
         return;
       }
       if (!result) {
-        res.status(404).json({ message: "item not found" });
         return;
       } else {
         try {
@@ -232,6 +231,25 @@ const removeFromFavorites = async (req, res) => {
   res.status(202).json({ message: "updated successfully" });
 };
 
+const getUser = async (req, res) => {
+  const check = authModel.findOne(
+    {
+      email: req.body.email,
+    },
+    async (err, result) => {
+      if (err) {
+        res.status(401).json({ message: "error! could not find user" });
+        return;
+      }
+      if (!result) {
+        res.status(404).json({ message: "user not found" });
+        return;
+      } else {
+        res.status(201).json(result);
+      }
+    }
+  );
+};
 module.exports = {
   signUp,
   signIn,
@@ -239,4 +257,5 @@ module.exports = {
   addtoCart,
   removeFromFavorites,
   addtoFavorites,
+  getUser,
 };

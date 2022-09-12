@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useCreateUserDispatchContext } from "../context/userContext";
 import "./reglogin.css";
 
 export default function RegLogin() {
@@ -10,6 +11,8 @@ export default function RegLogin() {
   const [image, setImage] = React.useState("");
   const navigate = useNavigate();
   let data;
+
+  const setUser = useCreateUserDispatchContext();
   const handleSignIn = async (propEmail, propPassword) => {
     try {
       const response = await fetch("http://localhost:3003/auth/signin", {
@@ -21,13 +24,23 @@ export default function RegLogin() {
         }),
       });
 
-      const data = await (await response).json();
+      data = await (await response).json();
 
       console.log(data);
 
       if (response.ok === true) {
+        window.localStorage.setItem("isLoggedIn", true);
+        const rememberUser = JSON.stringify(data);
+        window.localStorage.setItem("user", rememberUser);
+        if (data.email === "admin@gmail.com" && data.password === "1234") {
+          setUser.handleSignedInChange(true);
+          setUser.handleUserChange(data);
+          navigate("/admin");
+          return;
+        }
+        setUser.handleSignedInChange(true);
+        setUser.handleUserChange(data);
         navigate("/");
-        alert("successfully logged In");
       }
       if (response.ok === false) {
         alert("login unsuccessful");
@@ -50,20 +63,15 @@ export default function RegLogin() {
       formData.append("fullName", propsName);
       formData.append("email", propEmail);
       formData.append("password", propPassword);
-      const options = {
+
+      const response = await fetch("http://localhost:3003/auth/signUp", {
         method: "POST",
         body: formData,
-        mode: "no-cors",
-      };
-      const response = await fetch(
-        "http://localhost:3003/auth/signUp",
-        options
-      );
+      });
 
-      let data = await response.text();
-
-      console.log(data);
+      console.log(response);
       if (response.ok === true) {
+        setOption("Login");
         alert("account successfully created");
       }
       if (response.status >= 400) {

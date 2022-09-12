@@ -15,6 +15,7 @@ const addProduct = async (req, res) => {
     name: req.body.name,
     stock: req.body.stock,
     price: req.body.price,
+    Category: req.body.Category,
     productImage: req.file.path,
   });
   if (!req.body.id) {
@@ -38,6 +39,11 @@ const addProduct = async (req, res) => {
 
   if (!req.file.path) {
     res.status(402).json({ message: "Image is missing" });
+    return;
+  }
+
+  if (!req.body.Category) {
+    res.status(402).json({ message: "Category is missing" });
     return;
   }
 
@@ -85,6 +91,11 @@ const updateProduct = async (req, res) => {
     return;
   }
 
+  if (!req.body.Category) {
+    res.status(402).json({ message: "Category is missing" });
+    return;
+  }
+
   try {
     productModel.updateOne(
       { id: req.body.id },
@@ -93,6 +104,7 @@ const updateProduct = async (req, res) => {
           name: req.body.name,
           stock: req.body.stock,
           price: req.body.price,
+          Category: req.body.Category,
         },
       }
     );
@@ -103,4 +115,23 @@ const updateProduct = async (req, res) => {
   res.status(201).json({ message: "Updated successfully" });
 };
 
-module.exports = { getAllProducts, addProduct, deleteProduct, updateProduct };
+const addField = async (req, res) => {
+  try {
+    await productModel.update(
+      {},
+      { $set: { Category: "Laptop" } },
+      { multi: true }
+    );
+    res.status(201).json({ message: "Updated successfully" });
+  } catch (error) {
+    return;
+  }
+};
+
+module.exports = {
+  getAllProducts,
+  addProduct,
+  deleteProduct,
+  updateProduct,
+  addField,
+};

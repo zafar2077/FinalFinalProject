@@ -2,11 +2,13 @@
 .leftbar {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: auto;
   background-color: rgba(45, 45, 45, 255);
-  width: 400px;
+  width: 20%;
   margin: 0px 0px 0px 0px;
   padding: 0px 0px 0px 0px;
+  position: fixed;
+  z-index: 1;
 }
 
 .logoContainer {
@@ -18,11 +20,13 @@
 }
 
 .extendedLeftbar {
+  position: fixed;
+  z-index: 1;
   display: flex;
   flex-direction: column;
+  width: 20%;
   height: 100%;
   background-color: rgba(45, 45, 45, 255);
-  width: 400px;
   margin: 0px 0px 0px 0px;
   padding: 0px 0px 0px 0px;
 }
@@ -87,15 +91,27 @@ Link {
 .LowerOptionContainer {
   display: flex;
   justify-content: left;
-
+  height: 100vh;
   margin-left: 20px;
   margin-top: 10px;
 }
 
+.LowerOptionContainer:hover {
+  cursor: pointer;
+}
 .LowerLeftBarText {
   color: gray;
   text-align: center;
   margin-left: 10px;
   font-family: "Fredoka One", cursive;
   font-size: 14px;
+}
+
+.selectedOption {
+  display: flex;
+  justify-content: left;
+  height: 100vh;
+  margin-left: 20px;
+  margin-top: 10px;
+  background-color: purple;
 }

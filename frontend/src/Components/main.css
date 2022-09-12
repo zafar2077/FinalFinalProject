@@ -7,8 +7,14 @@ html {
   background-color: rgba(36, 36, 36, 255);
   display: flex;
   flex-direction: column;
+  height: fit-content;
 }
-
+.smallProductsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  height: 100vh;
+}
 .searchInput {
   border-radius: 8px;
   font-size: 15px;
@@ -17,7 +23,7 @@ html {
   padding: 7.5px 5px 7.5px 35px;
   width: 200px;
   border-width: 0px;
-  margin-top: 40px;
+  margin-top: 5%;
   color: white;
 }
 
@@ -38,15 +44,15 @@ html {
 }
 .mainIcons {
   position: absolute;
-  margin-top: 47.5px;
+  margin-top: 10%;
   margin-left: 10px;
   font-size: 20px;
   color: grey;
 }
 .profileAvatar {
   border-radius: 100px;
-  height: 30px;
-  width: 30px;
+  height: 35px;
+  width: 35px;
   margin-bottom: 0px;
 }
 .topText {
@@ -70,8 +76,11 @@ html {
   margin-bottom: 0px;
   margin-right: 2%;
 }
+.profileIconContainer:hover {
+  cursor: pointer;
+}
 .carouselImage {
-  height: 220px;
+  height: 170px;
   border-radius: 8px;
 }
 
@@ -137,4 +146,11 @@ html {
   border: 0px solid;
   border-color: rgba(46, 45, 45, 0.822);
   color: white;
+}
+
+.productsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  height: fit-content;
 }
